@@ -472,7 +472,7 @@ module BitClust
     end
 
     def direct_url(url)
-      %Q(<a class="external" href="#{escape_html(url)}">#{escape_html(url)}</a>)
+      %Q(<a class="external" href="#{escape_html(url)}" target="_blank">#{escape_html(url)}</a>)
     end
 
     def reference_link(arg)
@@ -509,14 +509,14 @@ module BitClust
 
     def blade_link(ml, num)
       url = sprintf(BLADE_URL, ml, num)
-      %Q(<a class="external" href="#{escape_html(url)}">[#{escape_html("#{ml}:#{num}")}]</a>)
+      %Q(<a class="external" href="#{escape_html(url)}" target="_blank">[#{escape_html("#{ml}:#{num}")}]</a>)
     end
 
     RFC_URL = 'https://tools.ietf.org/html/rfc%s'
 
     def rfc_link(num)
       url = sprintf(RFC_URL, num)
-      %Q(<a class="external" href="#{escape_html(url)}">[RFC#{escape_html(num)}]</a>)
+      %Q(<a class="external" href="#{escape_html(url)}" target="_blank">[RFC#{escape_html(num)}]</a>)
     end
 
     opengroup_url = 'http://www.opengroup.org/onlinepubs/009695399'
@@ -546,14 +546,14 @@ module BitClust
     def man_link(spec)
       m = /([\w\.\/]+)\((\w+)\)/.match(spec) or return escape_html(spec)
       url = man_url(m[2], escape_html(m[1])) or return escape_html(spec)
-      %Q(<a class="external" href="#{escape_html(url)}">#{escape_html("#{m[1]}(#{m[2]})")}</a>)
+      %Q(<a class="external" href="#{escape_html(url)}" target="_blank">#{escape_html("#{m[1]}(#{m[2]})")}</a>)
     end
 
     BUGS_URL = "https://bugs.ruby-lang.org/issues/%s"
 
     def bugs_link(type, id)
       url = sprintf(BUGS_URL, id)
-      %Q(<a class="external" href="#{escape_html(url)}">[#{type}##{id}]</a>)
+      %Q(<a class="external" href="#{escape_html(url)}" target="_blank">[#{type}##{id}]</a>)
     end
 
     def rdoc_url(method_id, version)
@@ -567,7 +567,7 @@ module BitClust
     end
 
     def rdoc_link(method_id, version)
-      a_href(rdoc_url(method_id, version), "rdoc")
+      a_href_ext(rdoc_url(method_id, version), "rdoc")
     end
 
     def complete_spec(spec0)
