@@ -342,7 +342,8 @@ EOS
               end
               @index_contents << Sitemap::Content.new("#{e.name} (#{e.library.name})", filename)
             when :method
-              e.names.each do |e_name|
+              e.names.each_with_index do |e_name, idx|
+                @html_files << create_html_file(c, manager, @outputdir, db, method_index=idx) if idx > 0
                 name = e.typename == :special_variable ? "$#{e_name}" : e_name
                 @index_contents <<
                   Sitemap::Content.new("#{name} (#{e.library.name} - #{e.klass.name})", filename)
@@ -356,6 +357,7 @@ EOS
           pb.finish
         end
         @html_files.sort!
+        @html_files.uniq!
         create_file(@outputdir + 'refm.hhp', HHP_SKEL)
         create_file(@outputdir + 'refm.hhc', HHC_SKEL)
         create_file(@outputdir + 'refm.hhk', HHK_SKEL)
@@ -388,7 +390,7 @@ EOS
                     "\u2212" => "\uff0d",
                     "\u301c" => "\uff5e" } 
 
-      def create_html_file(entry, manager, outputdir, db)
+      def create_html_file(entry, manager, outputdir, db, method_index=0)
         html = manager.entry_screen(entry, {:database => db}).body
         e = entry.is_a?(Array) ? entry.sort.first : entry
         path = case e.type_id
@@ -396,7 +398,7 @@ EOS
                  outputdir + e.type_id.to_s + (NameUtils.encodename_fs(e.name) + '.html')
                when :method
                  outputdir + e.type_id.to_s + NameUtils.encodename_fs(e.klass.name) +
-                   e.typechar + (NameUtils.encodename_fs(e.name) + '.html')
+                   e.typechar + (NameUtils.encodename_fs(e.names[method_index]) + '.html')
                else
                  raise
                end
