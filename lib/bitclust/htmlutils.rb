@@ -58,6 +58,15 @@ module BitClust
       %Q(<a href="#{escape_html(url)}">#{escape_html(label)}</a>)
     end
 
+    def a_href_ext(url, label, version=nil)
+      url2 = if url.match?(%r!^/!) # modify local link to rurema Web
+        "https://docs.ruby-lang.org/ja/#{version}#{url.gsub(/-([a-z])/){ $1.upcase}}"
+      else
+        url
+      end
+      %Q(<a href="#{escape_html(url2)}" target="_blank">#{escape_html(label)}</a>)
+    end
+
     ESC = {
       '&' => '&amp;',
       '"' => '&quot;',
