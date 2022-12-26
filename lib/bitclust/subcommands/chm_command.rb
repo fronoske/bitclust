@@ -318,8 +318,9 @@ EOS
             method_name = entry.klass.name + entry.typemark + entry.name
             (methods[method_name] ||= []) << entry
           end
-
-          entries = db.docs + db.libraries.sort + db.classes.sort + methods.values.sort
+          
+          classes_wo_errono = db.classes.reject{|c| c.respond_to?(:name) && !c.name.match?(/^Errno::(EXXX|NOERROR)$/) && c.name.match?(/^Errno::/) }
+          entries = db.docs + db.libraries.sort + classes_wo_errono.sort + methods.values.sort
           pb = ProgressBar.create(title: 'entry', total: entries.size)
           entries.each do |c|
             filename = create_html_file(c, manager, @outputdir, db)
