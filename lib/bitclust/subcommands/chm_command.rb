@@ -362,7 +362,7 @@ EOS
         create_file(@outputdir + 'library/index.html', manager.library_index_screen(db.libraries.sort, {:database => db}).body)
         create_file(@outputdir + 'class/index.html', manager.class_index_screen(db.classes.sort, {:database => db}).body)
         FileUtils.cp(@manager_config[:themedir] + @manager_config[:css_url],
-                     @outputdir.to_s, {:verbose => true, :preserve => true})
+                     @outputdir.to_s, verbose: true, preserve: true)
       end
 
       private
@@ -404,7 +404,7 @@ EOS
 
         begin
           new_html = html.gsub(/charset=utf-8/i, 'charset=Windows-31J').
-                     encode('windows-31j', { :fallback => FIX_UNDEF })
+                     encode('windows-31j', fallback: FIX_UNDEF)
           mode = 'w:windows-31j'
         rescue
           new_html = html # write file as it is, utf-8
@@ -420,7 +420,7 @@ EOS
         $stderr.print("creating #{path} ...")
         str = ERB.new(skel).result(binding).
               gsub(/charset=utf-8/i, 'charset=Windows-31J').
-              encode('windows-31j', { :fallback => FIX_UNDEF } )
+              encode('windows-31j', fallback: FIX_UNDEF)
         path.open('w:windows-31j') do |f|
           f.write(str)
         end
